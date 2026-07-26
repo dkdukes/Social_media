@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import viewsets
+from rest_framework import viewsets,filters
 from rest_framework.response import Response
 from rest_framework import status,exceptions
 from django.db import IntegrityError
@@ -21,6 +21,9 @@ class PostViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = UserSeriaLizer
+
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['username','user_first_name','user_last_name']
 
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comments.objects.all()
