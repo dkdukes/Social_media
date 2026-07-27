@@ -1,0 +1,103 @@
+<nav class="bg-gray-900 text-white shadow-lg">
+  <div class="container mx-auto px-6 py-4">
+    <div class="flex justify-between items-center">
+      
+      {# Site branding #}
+      <a href="{% url 'index' %}" class="text-2xl font-bold hover:text-gray-300">
+         BlogApp
+      </a>
+      
+      {# Navigation links #}
+      <ul class="flex space-x-6 items-center">
+        
+        {# Everyone can see blog list #}
+        <li>
+          <a href="{% url 'blog-list' %}" class="hover:text-gray-300 transition">
+            Browse Blogs
+          </a>
+        </li>
+        
+        {% if user.is_authenticated %}
+          
+          {# Authors and above can create posts #}
+          {% if user.has_perm('blog_api.add_blog') %}
+            <li>
+              <a href="{% url 'blog-create' %}" 
+                 class="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700 transition">
+                 New Post
+              </a>
+            </li>
+          {% endif %}
+          
+          {# Editors and Admins see review queue #}
+          {% if user.has_perm('blog_api.publish_blog') %}
+            <li>
+              <a href="{% url 'blog-review' %}" 
+                 class="hover:text-gray-300 transition flex items-center">
+                 Review Queue
+                <span class="ml-2 bg-red-500 text-xs px-2 py-1 rounded-full">
+                  {{ pending_count }}
+                </span>
+              </a>
+            </li>
+          {% endif %}
+          
+          {# Staff members see admin panel link #}
+          {% if user.is_staff %}
+            <li>
+              <a href="{% url 'admin:index' %}" 
+                 class="hover:text-yellow-300 transition">
+                 Admin
+              </a>
+            </li>
+          {% endif %}
+          
+          {# Logged-in user menu #}
+          <li class="relative group">
+            <button class="hover:text-gray-300 flex items-center">
+               {{ user.email|truncatechars:20 }}
+              <span class="ml-1">▾</span>
+            </button>
+            
+            {# Dropdown menu #}
+            <div class="hidden group-hover:block absolute right-0 mt-2 w-48 
+                        bg-white text-gray-800 rounded-lg shadow-lg">
+              <a href="{% url 'profile' %}" 
+                 class="block px-4 py-2 hover:bg-gray-100">
+                My Profile
+              </a>
+              <a href="{% url 'my-blogs' %}" 
+                 class="block px-4 py-2 hover:bg-gray-100">
+                My Posts
+              </a>
+              <form action="{% url 'logout' %}" method="post" class="m-0">
+                {% csrf_token %}
+                <button type="submit" 
+                        class="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600">
+                  Logout
+                </button>
+              </form>
+            </div>
+          </li>
+          
+        {% else %}
+          
+          {# Anonymous user options #}
+          <li>
+            <a href="{% url 'login' %}" 
+               class="hover:text-gray-300 transition">
+              Login
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'register' %}" 
+               class="bg-green-600 px-4 py-2 rounded hover:bg-green-700 transition">
+              Sign Up
+            </a>
+          </li>
+          
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>

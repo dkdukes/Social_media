@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{%block content %}
+    {%if users %}
+    {%for user in users%}
+    <img src="{{user.image.url}}" alt="{{user.username}}" class="w-full h-64 object-cover mb-4">
+    <h2>{{user.username|upper}}</h2>
+    <p>{{user.first_name}}</p>
+    <p>Posted On: {{user.created_at}}</p>
+    <hr>
+    {%endfor%}
+    {%else%}
+    <p>No User Available</p>
+
+    {%endif%}
+{%endblock%}

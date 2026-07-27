@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{%block content %}
+    {%if posts %}
+    {%for post in posts%}
+    {% if post.image %}
+     <img 
+        src="{{post.image.url}}" 
+        alt="{{post.caption}}" 
+        class="w-full h-64 object-cover mb-4"
+     >
+     {% endif %}
+    <h2>{{post.caption|title}}</h2>
+    <div>
+        {% for tag in post.tags.all %}
+        {{tag.tags}}
+        {% empty %}
+        <p>No Tags</p>
+        {% endfor %}
+    </div>
+    <div class="flex items-center gap-4 mt-4 mb-4">
+
+        <!-- Like button -->
+        <form method="POST" action="{% url 'like-post' post.id %}">
+            {% csrf_token %}
+            <button 
+                type="submit"
+                class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+            >
+                👍 Like
+            </button>
+        </form>
+
+        <!-- Comment button -->
+        <a 
+            href="{% url 'comment-post' post.id %}"
+            class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300"
+        >
+            💬 Comment
+        </a>
+
+    </div>
+    <p>Posted On: {{post.created_at}}</p>
+    <hr>
+    {%endfor%}
+    {%else%}
+    <p>No Post Available</p>
+
+    {%endif%}
+{%endblock%}
