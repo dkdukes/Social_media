@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 # from rest_framework import viewsets,filters
 # from rest_framework.response import Response
 # from rest_framework import status,exceptions
@@ -51,7 +51,32 @@ def create_post(request):
 
 def view_posts(request):
     all_posts =Posts.objects.all()
-    return render(request, "all_posts.html",{"posts":all_posts})
+    return render(request, "posts/all_posts.html",{"posts":all_posts})
+
+def like_post(request,post_id):
+    post = get_object_or_404(Posts,id=post_id)
+    
+    like,created = Likes.objects.get_or_create(
+        user = request.user,
+        post = post
+    )
+    if not created:
+        like.delete()
+    return redirect("view-posts")
+
+def comment_post(request,comment_id):
+    post = get_object_or_404(Posts,id=comment_id)
+    if request.method == "POST":
+        comment = request.POST.get("content")
+        if comment:
+            Comments.objects.create(
+                user = request.user,
+                post = post,
+                comment = comment
+            )
+            return redirect("view-posts")
+    return render(request,"posts/comment_post.html",{"post":post})
+
 
 
     
