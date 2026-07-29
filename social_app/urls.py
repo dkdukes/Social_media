@@ -23,7 +23,8 @@ from . import views
 urlpatterns = [
     # path("v1/",include(router.urls)),
     path("users/create/",views.create_user,name="create-user"),
-    path("users/",views.view_users,name="all-users"),
+    path("users/login/",views.login_user,name="login-user"),
+    path("users/logout/",views.logout_user,name="logout-user"),
     path("tags/",views.create_tag,name="create-tag"),
     path("posts/create-post/",views.create_post,name="create-post"),
     path("posts/view-posts/",views.view_posts,name="view-posts"),

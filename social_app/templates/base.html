@@ -3,14 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title%}Social Media APP {% endblock%}</title>
+
+    <title>{% block title %}Social Media APP{% endblock %}</title>
+
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body>
-    <div class="max-w-6xl mx-auto py-4 bg-gray-100 ">
-    {% block content%}
-    
-    {% endblock%}
-    </div>
+
+<body class="bg-gray-100">
+
+    <!-- Navbar -->
+    <nav class="bg-gray-900 text-white px-6 py-4">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+
+            <h1 class="text-xl font-bold">
+                Social Media APP
+            </h1>
+
+            {% if user.is_authenticated %}
+
+                <div class="flex items-center gap-4">
+
+                    <span>
+                        Welcome, {{ user.username }}
+                    </span>
+
+                    <form method="POST" action="{% url 'logout-user' %}">
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="bg-red-500 px-4 py-2 rounded-lg hover:bg-red-600"
+                        >
+                            Logout
+                        </button>
+                    </form>
+
+                </div>
+
+            {% else %}
+
+                <a
+                    href="{% url 'login-user' %}"
+                    class="bg-blue-500 px-4 py-2 rounded-lg hover:bg-blue-600"
+                >
+                    Login
+                </a>
+
+            {% endif %}
+
+        </div>
+    </nav>
+
+
+    <!-- Page Content -->
+    <main class="max-w-6xl mx-auto py-6 px-4">
+
+        {% block content %}
+
+        {% endblock %}
+
+    </main>
+
 </body>
 </html>

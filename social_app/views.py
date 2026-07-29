@@ -7,13 +7,10 @@ from . models import Tags, Posts, CustomUser,Comments,Likes,Followers
 # from . serializers import TagSerializer,PostSerializer,UserSeriaLizer,CommentSeriaLizer,LikeSeriaLizer,FollowSeriaLizer
 # from rest_framework.decorators import api_view
 from . forms import UserForm,TagForm, PostForm
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import login,logout
 
 # Create your views here.
-
-def view_users(request):
-    all_users =CustomUser.objects.all()
-    return render(request,"all_users.html",{"users":all_users})
-
 def create_user(request):
     if request.method == 'POST':
         form = UserForm(request.POST,request.FILES)
@@ -21,17 +18,35 @@ def create_user(request):
             user = form.save(commit=False)
             user.set_password(form.cleaned_data["password"])
             user.save()
+            login(request,user)
             return redirect('view-posts')
     else:
         form=UserForm()
     return render(request, "users/create_user.html",{"form":form})
+
+def login_user(request):
+    if request.method == "POST":
+        form = AuthenticationForm(request,data = request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request,user)
+            return redirect("view-posts")
+    else:
+        form = AuthenticationForm
+    return render(request,"users/login.html",{"form":form})
+
+
+def logout_user(request):
+    logout(request)
+    return redirect("login-user")
+
 
 def create_tag(request):
     if request.method == "POST":
         form = TagForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect("all-users")
+            return redirect("view-posts")
     else:
         form=TagForm()
     return render(request,"create_tag.html",{"form":form})
