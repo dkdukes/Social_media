@@ -18,11 +18,13 @@ def create_user(request):
     if request.method == 'POST':
         form = UserForm(request.POST,request.FILES)
         if form.is_valid():
-            form.save()
-            return redirect('all-users')
+            user = form.save(commit=False)
+            user.set_password(form.cleaned_data["password"])
+            user.save()
+            return redirect('view-posts')
     else:
         form=UserForm()
-    return render(request, "create_user.html",{"form":form})
+    return render(request, "users/create_user.html",{"form":form})
 
 def create_tag(request):
     if request.method == "POST":

@@ -22,7 +22,7 @@ from . import views
 
 urlpatterns = [
     # path("v1/",include(router.urls)),
-    path("create/",views.create_user,name="create-user"),
+    path("users/create/",views.create_user,name="create-user"),
     path("users/",views.view_users,name="all-users"),
     path("tags/",views.create_tag,name="create-tag"),
     path("posts/create-post/",views.create_post,name="create-post"),
