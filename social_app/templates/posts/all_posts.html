@@ -2,7 +2,10 @@
 
 {%block content %}
     {%if posts %}
+    
     {%for post in posts%}
+    <a href="{% url 'post-detail' post.id %}">
+    <h2 class="mb-4">{{post.caption|title}}</h2>
     {% if post.image %}
      <img 
         src="{{post.image.url}}" 
@@ -10,7 +13,7 @@
         class="w-full h-64 object-cover mb-4"
      >
      {% endif %}
-    <h2>{{post.caption|title}}</h2>
+    
     <div>
         {% for tag in post.tags.all %}
         {{tag.tags}}
@@ -27,7 +30,7 @@
                 type="submit"
                 class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
             >
-                <span class="ml-2 text-gray-600">{{post.likes_set.count}}Like</span> 
+                <span class="ml-2 text-gray-600">{{post.like.count}}Like</span> 
             </button>
         </form>
 
@@ -36,8 +39,9 @@
             href="{% url 'comment-post' post.id %}"
             class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300"
         >
-            💬 Comment
+           {{post.comments_set.count}} Comment
         </a>
+    </a>
 
     </div>
     <p>Posted On: {{post.created_at}}</p>

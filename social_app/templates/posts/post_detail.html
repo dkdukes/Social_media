@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="max-w-2xl mx-auto">
+
+    <!-- Post -->
+    <div class="bg-white rounded-lg shadow p-4">
+
+        {% if post.image %}
+            <img
+                src="{{ post.image.url }}"
+                alt="{{ post.caption }}"
+                class="w-full rounded-lg mb-4"
+            >
+        {% endif %}
+
+        <h2 class="text-xl font-bold">
+            {{ post.caption }}
+        </h2>
+
+        <p class="text-gray-500">
+            Posted on {{ post.created_at }}
+        </p>
+
+    </div>
+
+
+    <!-- Comments -->
+    <div class="mt-6">
+
+        <h3 class="text-lg font-bold mb-4">
+            Comments ({{ comments.count }})
+        </h3>
+
+        {% if comments %}
+
+            {% for comment in comments %}
+
+                <div class="border-b py-3">
+
+                    <p class="font-semibold">
+                        {{ comment.user.username }}
+                    </p>
+
+                    <p class="text-gray-700">
+                        {{ comment.comment }}
+                    </p>
+
+                    <p class="text-sm text-gray-400">
+                        {{ comment.created_at }}
+                    </p>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p class="text-gray-500">
+                No comments yet.
+            </p>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

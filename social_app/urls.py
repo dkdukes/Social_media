@@ -28,6 +28,7 @@ urlpatterns = [
     path("posts/create-post/",views.create_post,name="create-post"),
     path("posts/view-posts/",views.view_posts,name="view-posts"),
     path("post/<int:post_id>/like/",views.like_post,name="like-post"),
-    path("post/<int:comment_id>/comment",views.comment_post,name="comment-post")
+    path("post/<int:comment_id>/comment",views.comment_post,name="comment-post"),
+    path("post/<int:post_id>/details",views.post_detail,name="post-detail")
 
 ]

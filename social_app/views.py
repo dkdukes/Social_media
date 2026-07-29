@@ -77,6 +77,14 @@ def comment_post(request,comment_id):
             return redirect("view-posts")
     return render(request,"posts/comment_post.html",{"post":post})
 
+def post_detail(request,post_id):
+    post = Posts.objects.get(id = post_id)
+    comments = Comments.objects.filter(post = post).order_by("created_at")
+    return render(request, "posts/post_detail.html",{
+        "post":post,
+        "comments":comments
+    })
+
 
 
     
