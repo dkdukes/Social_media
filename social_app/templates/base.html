@@ -21,33 +21,81 @@
 
             {% if user.is_authenticated %}
 
-                <div class="flex items-center gap-4">
+            <div class="relative">
+
+                <!-- User menu button -->
+                <button
+                    onclick="toggleMenu()"
+                    class="flex items-center gap-2 hover:text-gray-300"
+                >
+
+                    {% if user.image %}
+                        <img
+                            src="{{ user.image.url }}"
+                            alt="{{ user.username }}"
+                            class="w-10 h-10 rounded-full object-cover"
+                        >
+                    {% endif %}
 
                     <span>
-                        Welcome, {{ user.username }}
+                        {{ user.username }}
                     </span>
+
+                    <span>▼</span>
+
+                </button>
+
+
+                <!-- Dropdown -->
+                <div
+                    id="userMenu"
+                    class="hidden absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-lg shadow-lg overflow-hidden"
+                >
+
+                    <a
+                        href="{% url 'settings' %}"
+                        class="block px-4 py-3 hover:bg-gray-100"
+                    >
+                        ⚙️ Settings
+                    </a>
+
+                    <a
+                        href="{% url 'my-posts' %}"
+                        class="block px-4 py-3 hover:bg-gray-100"
+                    >
+                        📝 My Posts
+                    </a>
+
+                    <a
+                        href="{% url 'followers' %}"
+                        class="block px-4 py-3 hover:bg-gray-100"
+                    >
+                        👥 Followers
+                    </a>
+
+                    <a
+                        href="{% url 'following' %}"
+                        class="block px-4 py-3 hover:bg-gray-100"
+                    >
+                        👤 Following
+                    </a>
+
+                    <div class="border-t"></div>
 
                     <form method="POST" action="{% url 'logout-user' %}">
                         {% csrf_token %}
 
                         <button
                             type="submit"
-                            class="bg-red-500 px-4 py-2 rounded-lg hover:bg-red-600"
+                            class="w-full text-left px-4 py-3 hover:bg-gray-100 text-red-600"
                         >
-                            Logout
+                            🚪 Logout
                         </button>
                     </form>
 
                 </div>
 
-            {% else %}
-
-                <a
-                    href="{% url 'login-user' %}"
-                    class="bg-blue-500 px-4 py-2 rounded-lg hover:bg-blue-600"
-                >
-                    Login
-                </a>
+            </div>
 
             {% endif %}
 
@@ -63,6 +111,12 @@
         {% endblock %}
 
     </main>
+    <script>
+    function toggleMenu() {
+        const menu = document.getElementById("userMenu");
 
+        menu.classList.toggle("hidden");
+    }
+    </script>
 </body>
 </html>

@@ -53,7 +53,41 @@ class UserForm(forms.ModelForm):
         }
 
         
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ["first_name","last_name","username","email","bio","image"]
+        widgets = {
+            'username': forms.TextInput(attrs={
+                'class': 'w-full border rounded-lg px-4 py-2',
+                'placeholder': 'Username'
+            }),
 
+            'first_name': forms.TextInput(attrs={
+                'class': 'w-full border rounded-lg px-4 py-2',
+                'placeholder': 'First name'
+            }),
+
+            'last_name': forms.TextInput(attrs={
+                'class': 'w-full border rounded-lg px-4 py-2',
+                'placeholder': 'Last name'
+            }),
+
+            'email': forms.EmailInput(attrs={
+                'class': 'w-full border rounded-lg px-4 py-2',
+                'placeholder': 'Email'
+            }),
+
+            'bio': forms.Textarea(attrs={
+                'class': 'w-full border rounded-lg px-4 py-2',
+                'placeholder': 'Tell us about yourself',
+                'rows': 4
+            }),
+
+            'image': forms.FileInput(attrs={
+                'class': 'w-full border rounded-lg px-4 py-2'
+            }),
+        }
 class TagForm(forms.ModelForm):
     class Meta:
         model = Tags

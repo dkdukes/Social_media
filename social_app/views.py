@@ -6,9 +6,10 @@ from django.shortcuts import render,redirect,get_object_or_404
 from . models import Tags, Posts, CustomUser,Comments,Likes,Followers
 # from . serializers import TagSerializer,PostSerializer,UserSeriaLizer,CommentSeriaLizer,LikeSeriaLizer,FollowSeriaLizer
 # from rest_framework.decorators import api_view
-from . forms import UserForm,TagForm, PostForm
+from . forms import UserForm,TagForm, PostForm, UserUpdateForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login,logout
+
 
 # Create your views here.
 def create_user(request):
@@ -39,6 +40,28 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return redirect("login-user")
+
+
+def settings(request):
+    user = request.user
+    if request.method == "POST":
+        form = UserUpdateForm(request.POST,request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect("settings")
+    else:
+        form = UserUpdateForm(instance=user)
+    return render(request,"users/settings.html",{"form":form})
+
+
+def my_posts(request):
+    pass
+
+def followers(request):
+    pass
+
+def following(request):
+    pass
 
 
 def create_tag(request):

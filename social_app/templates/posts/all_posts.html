@@ -28,9 +28,9 @@
             {% csrf_token %}
             <button 
                 type="submit"
-                class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                class="bg-blue-500 text-red-600 px-4 py-2 rounded-lg hover:bg-blue-600"
             >
-                <span class="ml-2 text-gray-600">{{post.like.count}}Like</span> 
+                <span class="ml-2 text-white">{{post.like.count}}Like</span> 
             </button>
         </form>
 
