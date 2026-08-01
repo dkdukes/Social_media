@@ -1,0 +1,26 @@
+{% extends 'base.html'%}
+{% block content%}
+{% for post in posts %}
+<div class="mb-4">
+    {% if post.image %}
+    <img src="{{post.image.url}}" alt="{{post.caption}}">
+    {% endif %}
+    <h3>{{post.caption}}</h3>
+    <p>{{post.created_at}}</p>
+</div>
+{% if post.user == request.user %}
+<div class="flex gap-2 mt-3">
+    <a href="{% url 'edit-post' post.pk %}"
+    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+    Edit
+    </a>
+    <a href="{% url 'delete-post' post.pk %}"
+    class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+    Delete
+    </a>
+</div>
+{% endif %}
+{% empty %}
+<p>No Posts yet</p>
+{% endfor %}
+{% endblock %}

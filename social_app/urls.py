@@ -38,5 +38,7 @@ urlpatterns = [
     path("following/",views.following,name="following"),
     path("settings/password/",auth_views.PasswordChangeView.as_view(template_name="users/password_change.html",success_url="/settings/password/done/"),name="password-change"),
     path("settings/password/done/",auth_views.PasswordChangeDoneView.as_view(template_name="users/password_change_done.html"),name="password-change-done"),
+    path("post/<int:pk>/edit/",views.edit_post,name="edit-post"),
+    path("posts/<int:pk>/delete/",views.delete_post,name="delete-post")
 
 ]

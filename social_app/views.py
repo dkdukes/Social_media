@@ -55,7 +55,44 @@ def settings(request):
 
 
 def my_posts(request):
-    pass
+    user = request.user
+    print("user is",user)
+    
+    posts = Posts.objects.filter(user=user)
+    print(posts.count())
+    return render(request, "posts/my_posts.html",{
+        "posts":posts
+    })
+
+def edit_post(request,pk):
+    posts = get_object_or_404(Posts,pk = pk,user = request.user)
+    if request.method == "POST":
+        form = PostForm(request.POST, request.FILES, instance=posts)
+        if form.is_valid():
+            form.save()
+            return redirect("my-posts")
+    else:
+        form = PostForm(instance=posts)
+
+    return render(request,"posts/edit_post.html",{"form":form})
+
+
+def delete_post(request,pk):
+    post = get_object_or_404(Posts, pk = pk, user = request.user)
+    if request.method == "POST":
+        post.delete()
+        return redirect("my-posts")
+    return render(request,"posts/delete_post.html",{"post":post})
+
+
+
+# def profile(request,username):
+#     user = get_object_or_404(CustomUser,username=username)
+#     context = {
+#         "profile_user":user,
+#         "posts":user.posts_set.all().order_by("-created_at")
+#     }
+#     return render(request,"my_posts.html",context)
 
 def followers(request):
     pass
