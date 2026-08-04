@@ -9,6 +9,7 @@ from . models import Tags, Posts, CustomUser,Comments,Likes,Followers
 from . forms import UserForm,TagForm, PostForm, UserUpdateForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login,logout
+from django.db.models import Subquery
 
 
 # Create your views here.
@@ -86,20 +87,68 @@ def delete_post(request,pk):
 
 
 
-# def profile(request,username):
-#     user = get_object_or_404(CustomUser,username=username)
-#     context = {
-#         "profile_user":user,
-#         "posts":user.posts_set.all().order_by("-created_at")
-#     }
-#     return render(request,"my_posts.html",context)
+def follower_user(request, user_id):
+    user_to_follow = get_object_or_404(CustomUser, id=user_id)
 
-def followers(request):
-    pass
+    # Prevent users from following themselves
+    if request.user == user_to_follow:
+        return redirect("post-detail", pk=user_id)
 
-def following(request):
-    pass
+    follow, created = Followers.objects.get_or_create(
+        follower=request.user,
+        following=user_to_follow
+    )
 
+    # If already following, unfollow
+    if not created:
+        follow.delete()
+
+    return redirect(request.META.get("HTTP_REFERER", "/"))
+
+
+def followers_list(request):
+    followers = Followers.objects.filter(
+        following=request.user
+    ).select_related("follower")
+
+    # Users the logged-in user already follows
+    following_ids = Followers.objects.filter(
+        follower=request.user
+    ).values("following")
+
+    # Suggested users
+    suggested_users = (
+        CustomUser.objects
+        .exclude(id=request.user.id)
+        .exclude(id__in=Subquery(following_ids))
+    )[:5]
+
+    context = {
+        "followers": followers,
+        "suggested_users": suggested_users,
+    }
+
+    return render(request, "users/followers_list.html", context)
+
+
+def following_list(request):
+    following = Followers.objects.filter(
+        follower=request.user
+    ).select_related("following")
+
+    return render(request, "users/following_list.html", {
+        "following": following
+    })
+
+
+
+def unfollow_user(request,user_id):
+    user_to_unfollow = get_object_or_404(CustomUser, id = user_id)
+    Followers.objects.filter(
+        follower = request.user,
+        following = user_to_unfollow
+    ).delete()
+    return redirect("posts/post_detail.html",user_id = user_id)
 
 def create_tag(request):
     if request.method == "POST":

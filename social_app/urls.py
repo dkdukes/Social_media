@@ -34,11 +34,13 @@ urlpatterns = [
     path("post/<int:post_id>/details",views.post_detail,name="post-detail"),
     path("settings/",views.settings,name="settings"),
     path("my_posts/",views.my_posts,name="my-posts"),
-    path("followers/",views.followers,name="followers"),
-    path("following/",views.following,name="following"),
     path("settings/password/",auth_views.PasswordChangeView.as_view(template_name="users/password_change.html",success_url="/settings/password/done/"),name="password-change"),
     path("settings/password/done/",auth_views.PasswordChangeDoneView.as_view(template_name="users/password_change_done.html"),name="password-change-done"),
     path("post/<int:pk>/edit/",views.edit_post,name="edit-post"),
-    path("posts/<int:pk>/delete/",views.delete_post,name="delete-post")
+    path("posts/<int:pk>/delete/",views.delete_post,name="delete-post"),
+    path("follow/<int:user_id>/",views.follower_user,name="follow-user"),
+    path("unfollow/<int:user_id>",views.unfollow_user,name="unfollow-user"),
+    path("followers/",views.followers_list,name="followers-list"),
+    path("following/",views.following_list,name="following_list")
 
 ]

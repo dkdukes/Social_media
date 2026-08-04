@@ -16,7 +16,7 @@
         <div class="max-w-6xl mx-auto flex justify-between items-center">
 
             <h1 class="text-xl font-bold">
-                Social Media APP
+                Let's Connect
             </h1>
 
             {% if user.is_authenticated %}
@@ -67,14 +67,14 @@
                     </a>
 
                     <a
-                        href="{% url 'followers' %}"
+                        href="{% url 'followers-list' %}"
                         class="block px-4 py-3 hover:bg-gray-100"
                     >
                         👥 Followers
                     </a>
 
                     <a
-                        href="{% url 'following' %}"
+                        href="{% url 'following_list' %}"
                         class="block px-4 py-3 hover:bg-gray-100"
                     >
                         👤 Following

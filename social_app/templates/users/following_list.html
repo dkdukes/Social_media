@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="text-2xl font-bold mb-4">Following</h2>
+
+{% if following %}
+    {% for follow in following %}
+        <div class="flex items-center justify-between border-b py-3">
+            <div>
+                <h3 class="font-semibold">
+                    {{ follow.following.username }}
+                </h3>
+
+                {% if follow.following.bio %}
+                    <p class="text-gray-500">
+                        {{ follow.following.bio }}
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>You're not following anyone yet.</p>
+{% endif %}
+{% endblock %}
