@@ -10,9 +10,11 @@ from . forms import UserForm,TagForm, PostForm, UserUpdateForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login,logout
 from django.db.models import Subquery
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
+
 def create_user(request):
     if request.method == 'POST':
         form = UserForm(request.POST,request.FILES)
@@ -20,8 +22,7 @@ def create_user(request):
             user = form.save(commit=False)
             user.set_password(form.cleaned_data["password"])
             user.save()
-            login(request,user)
-            return redirect('view-posts')
+            return redirect('login-user')
     else:
         form=UserForm()
     return render(request, "users/create_user.html",{"form":form})
@@ -42,7 +43,7 @@ def logout_user(request):
     logout(request)
     return redirect("login-user")
 
-
+@login_required
 def settings(request):
     user = request.user
     if request.method == "POST":
@@ -54,7 +55,7 @@ def settings(request):
         form = UserUpdateForm(instance=user)
     return render(request,"users/settings.html",{"form":form})
 
-
+@login_required
 def my_posts(request):
     user = request.user
     print("user is",user)
@@ -65,6 +66,8 @@ def my_posts(request):
         "posts":posts
     })
 
+
+@login_required
 def edit_post(request,pk):
     posts = get_object_or_404(Posts,pk = pk,user = request.user)
     if request.method == "POST":
@@ -77,7 +80,7 @@ def edit_post(request,pk):
 
     return render(request,"posts/edit_post.html",{"form":form})
 
-
+@login_required
 def delete_post(request,pk):
     post = get_object_or_404(Posts, pk = pk, user = request.user)
     if request.method == "POST":
@@ -86,7 +89,7 @@ def delete_post(request,pk):
     return render(request,"posts/delete_post.html",{"post":post})
 
 
-
+@login_required
 def follower_user(request, user_id):
     user_to_follow = get_object_or_404(CustomUser, id=user_id)
 
@@ -105,7 +108,7 @@ def follower_user(request, user_id):
 
     return redirect(request.META.get("HTTP_REFERER", "/"))
 
-
+@login_required
 def followers_list(request):
     followers = Followers.objects.filter(
         following=request.user
@@ -130,7 +133,7 @@ def followers_list(request):
 
     return render(request, "users/followers_list.html", context)
 
-
+@login_required
 def following_list(request):
     following = Followers.objects.filter(
         follower=request.user
@@ -141,7 +144,7 @@ def following_list(request):
     })
 
 
-
+@login_required
 def unfollow_user(request,user_id):
     user_to_unfollow = get_object_or_404(CustomUser, id = user_id)
     Followers.objects.filter(
@@ -150,6 +153,8 @@ def unfollow_user(request,user_id):
     ).delete()
     return redirect("posts/post_detail.html",user_id = user_id)
 
+
+@login_required
 def create_tag(request):
     if request.method == "POST":
         form = TagForm(request.POST)
@@ -160,6 +165,8 @@ def create_tag(request):
         form=TagForm()
     return render(request,"create_tag.html",{"form":form})
 
+
+@login_required
 def create_post(request):
     if request.method == "POST":
         form = PostForm(request.POST,request.FILES)
@@ -173,12 +180,15 @@ def create_post(request):
     else:
         form = PostForm()
 
-    return render(request,"create_post.html",{"form":form})
+    return render(request,"posts/create_post.html",{"form":form})
 
+@login_required
 def view_posts(request):
-    all_posts =Posts.objects.all()
+    all_posts =Posts.objects.all().order_by("-created_at")
     return render(request, "posts/all_posts.html",{"posts":all_posts})
 
+
+@login_required
 def like_post(request,post_id):
     post = get_object_or_404(Posts,id=post_id)
     
@@ -190,6 +200,7 @@ def like_post(request,post_id):
         like.delete()
     return redirect("view-posts")
 
+@login_required
 def comment_post(request,comment_id):
     post = get_object_or_404(Posts,id=comment_id)
     if request.method == "POST":
@@ -203,6 +214,8 @@ def comment_post(request,comment_id):
             return redirect("view-posts")
     return render(request,"posts/comment_post.html",{"post":post})
 
+
+@login_required
 def post_detail(request,post_id):
     post = Posts.objects.get(id = post_id)
     comments = Comments.objects.filter(post = post).order_by("created_at")

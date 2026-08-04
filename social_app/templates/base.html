@@ -1,122 +1,240 @@
+id="9p4x1"
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>{% block title %}Social Media APP{% endblock %}</title>
+    <title>{% block title %}Let's Connect{% endblock %}</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 
+
 <body class="bg-gray-100">
 
-    <!-- Navbar -->
-    <nav class="bg-gray-900 text-white px-6 py-4">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
 
-            <h1 class="text-xl font-bold">
+<!-- Navbar -->
+<nav class="sticky top-0 z-50 bg-gray-900 text-white shadow-lg">
+
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
+
+        <!-- Logo -->
+        <a href="{% url 'view-posts' %}"
+           class="flex items-center gap-2 text-2xl font-bold hover:text-blue-400 transition">
+
+            <span class="text-3xl">🔀</span>
+
+            <span>
                 Let's Connect
-            </h1>
+            </span>
 
-            {% if user.is_authenticated %}
+        </a>
 
+
+
+        {% if user.is_authenticated %}
+
+
+        <!-- Navigation actions -->
+        <div class="flex items-center gap-6">
+
+
+            <!-- Create Post -->
+            <a href="{% url 'create-post' %}"
+               class="hidden md:flex items-center gap-2 bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+
+                ➕
+                Create Post
+
+            </a>
+
+
+
+            <!-- User Dropdown -->
             <div class="relative">
 
-                <!-- User menu button -->
+
                 <button
                     onclick="toggleMenu()"
-                    class="flex items-center gap-2 hover:text-gray-300"
+                    class="flex items-center gap-3 hover:text-gray-300 transition"
                 >
 
+
+                    <!-- Avatar -->
                     {% if user.image %}
+
                         <img
                             src="{{ user.image.url }}"
-                            alt="{{ user.username }}"
-                            class="w-10 h-10 rounded-full object-cover"
+                            class="w-10 h-10 rounded-full object-cover border-2 border-blue-500"
                         >
+
+                    {% else %}
+
+                        <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center font-bold">
+
+                            {{ user.username|first|upper }}
+
+                        </div>
+
                     {% endif %}
 
-                    <span>
+
+
+                    <span class="hidden md:block">
                         {{ user.username }}
                     </span>
 
-                    <span>▼</span>
+
+                    <span>
+                        ▼
+                    </span>
+
 
                 </button>
 
 
-                <!-- Dropdown -->
+
+
+                <!-- Dropdown menu -->
+
                 <div
                     id="userMenu"
-                    class="hidden absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-lg shadow-lg overflow-hidden"
+                    class="hidden absolute right-0 mt-3 w-56 bg-white text-gray-800 rounded-xl shadow-xl overflow-hidden"
                 >
 
-                    <a
-                        href="{% url 'settings' %}"
-                        class="block px-4 py-3 hover:bg-gray-100"
-                    >
+
+                    <div class="px-4 py-3 border-b bg-gray-50">
+
+                        <p class="font-semibold">
+                            {{user.username}}
+                        </p>
+
+                        <p class="text-sm text-gray-500">
+                            {{user.email}}
+                        </p>
+
+                    </div>
+
+
+
+                    <a href="{% url 'settings' %}"
+                       class="block px-4 py-3 hover:bg-gray-100">
+
                         ⚙️ Settings
+
                     </a>
 
-                    <a
-                        href="{% url 'my-posts' %}"
-                        class="block px-4 py-3 hover:bg-gray-100"
-                    >
+
+                    <a href="{% url 'my-posts' %}"
+                       class="block px-4 py-3 hover:bg-gray-100">
+
                         📝 My Posts
+
                     </a>
 
-                    <a
-                        href="{% url 'followers-list' %}"
-                        class="block px-4 py-3 hover:bg-gray-100"
-                    >
+
+                    <a href="{% url 'followers-list' %}"
+                       class="block px-4 py-3 hover:bg-gray-100">
+
                         👥 Followers
+
                     </a>
 
-                    <a
-                        href="{% url 'following_list' %}"
-                        class="block px-4 py-3 hover:bg-gray-100"
-                    >
+
+                    <a href="{% url 'following_list' %}"
+                       class="block px-4 py-3 hover:bg-gray-100">
+
                         👤 Following
+
                     </a>
+
+
 
                     <div class="border-t"></div>
 
+
+
                     <form method="POST" action="{% url 'logout-user' %}">
+
                         {% csrf_token %}
 
                         <button
                             type="submit"
-                            class="w-full text-left px-4 py-3 hover:bg-gray-100 text-red-600"
+                            class="w-full text-left px-4 py-3 text-red-600 hover:bg-red-50"
                         >
+
                             🚪 Logout
+
                         </button>
+
                     </form>
+
 
                 </div>
 
+
             </div>
 
-            {% endif %}
 
         </div>
-    </nav>
 
 
-    <!-- Page Content -->
-    <main class="max-w-6xl mx-auto py-6 px-4">
+        {% endif %}
 
-        {% block content %}
 
-        {% endblock %}
+    </div>
 
-    </main>
-    <script>
-    function toggleMenu() {
-        const menu = document.getElementById("userMenu");
+</nav>
 
-        menu.classList.toggle("hidden");
+
+
+
+
+<!-- Main Content -->
+
+<main class="max-w-7xl mx-auto px-6 py-8">
+
+
+    {% block content %}
+
+    {% endblock %}
+
+
+</main>
+
+
+
+
+<script>
+
+function toggleMenu(){
+
+    const menu = document.getElementById("userMenu");
+
+    menu.classList.toggle("hidden");
+
+}
+
+
+// Close dropdown when clicking outside
+
+document.addEventListener("click", function(event){
+
+    const menu = document.getElementById("userMenu");
+
+    if(!event.target.closest(".relative")){
+
+        menu.classList.add("hidden");
+
     }
-    </script>
+
+});
+
+
+</script>
+
+
 </body>
 </html>

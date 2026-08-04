@@ -26,6 +26,10 @@ cloudinary.config(
     api_secret=os.getenv('API_SECRET')
 )
 
+LOGIN_URL = "login-user"
+LOGIN_REDIRECT_URL = "view-posts"
+LOGOUT_REDIRECT_URL = "login-user"
+
 AUTH_USER_MODEL = "social_app.CustomUser"
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
