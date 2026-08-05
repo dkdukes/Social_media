@@ -47,8 +47,8 @@ DEBUG = bool(os.getenv("DEBUG"))
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    "social-media-q2q3.onrender.com/",
-    "social-media-hzmy.onrender.com/"
+    "social-media-q2q3.onrender.com",
+    "social-media-hzmy.onrender.com"
 ]
 
 
