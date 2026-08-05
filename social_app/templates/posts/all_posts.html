@@ -53,7 +53,7 @@
                 type="submit"
                 class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
             >
-                ❤️ {{ post.like.count }} Likes
+                 {{ post.like.count }} Likes
             </button>
 
         </form>
@@ -64,7 +64,7 @@
             href="{% url 'comment-post' post.id %}"
             class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300"
         >
-            💬 {{ post.comments_set.count }} Comments
+            {{ post.comments_set.count }} Comments
         </a>
 
     </div>
