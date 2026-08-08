@@ -41,6 +41,7 @@ urlpatterns = [
     path("follow/<int:user_id>/",views.follower_user,name="follow-user"),
     path("unfollow/<int:user_id>",views.unfollow_user,name="unfollow-user"),
     path("followers/",views.followers_list,name="followers-list"),
-    path("following/",views.following_list,name="following_list")
+    path("following/",views.following_list,name="following_list"),
+    path('accounts/', include('allauth.urls')),
 
 ]

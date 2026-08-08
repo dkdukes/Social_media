@@ -1,23 +1,150 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load socialaccount %}
 
 {% block content %}
-<div class="max-w-md mx-auto mt-10 bg-white shadow-lg rounded-lg p-8">
-    <h2 class="text-2xl font-bold text-center mb-6">
-        Login
-    </h2>
 
-    <form method="POST" class="space-y-4">
-        {% csrf_token %}
+<div class="min-h-screen flex items-center justify-center bg-gray-100 px-4">
 
-        {{ form.as_p }}
+    <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
 
-        <button
-            type="submit"
-            class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition mb-4"
+        <!-- Logo -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">
+                Let's Connect
+            </h1>
+            <p class="text-gray-500 mt-2">
+                Welcome back! Please sign in to your account.
+            </p>
+        </div>
+
+        {% if form.non_field_errors %}
+        <div class="mb-4 rounded-lg bg-red-100 border border-red-300 p-3 text-red-700 text-sm">
+            {{ form.non_field_errors }}
+        </div>
+        {% endif %}
+
+        <form method="POST" class="space-y-5">
+            {% csrf_token %}
+
+            <!-- Username -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                    Username
+                </label>
+
+                {{ form.username }}
+
+                {% if form.username.errors %}
+                <p class="text-red-600 text-sm mt-1">
+                    {{ form.username.errors.0 }}
+                </p>
+                {% endif %}
+            </div>
+
+            <!-- Password -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                    Password
+                </label>
+
+                {{ form.password }}
+
+                {% if form.password.errors %}
+                <p class="text-red-600 text-sm mt-1">
+                    {{ form.password.errors.0 }}
+                </p>
+                {% endif %}
+            </div>
+
+            <!-- Remember Me -->
+            <div class="flex justify-between items-center text-sm">
+
+                <label class="flex items-center space-x-2">
+                    <input
+                        type="checkbox"
+                        class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    >
+                    <span class="text-gray-600">
+                        Remember me
+                    </span>
+                </label>
+
+                <a
+                    href="{% url 'password-change' %}"
+                    class="text-blue-600 hover:text-blue-700 font-medium"
+                >
+                    Forgot Password?
+                </a>
+
+            </div>
+
+            <!-- Login Button -->
+            <button
+                type="submit"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition duration-300"
+            >
+                Sign In
+            </button>
+
+        </form>
+
+        <!-- Divider -->
+        <div class="my-8 flex items-center">
+            <div class="flex-grow border-t border-gray-300"></div>
+
+            <span class="mx-4 text-gray-500 text-sm">
+                OR
+            </span>
+
+            <div class="flex-grow border-t border-gray-300"></div>
+        </div>
+
+        <!-- Google Login -->
+        <a
+            href="{% provider_login_url 'google' %}"
+            class="w-full flex items-center justify-center gap-3 border border-gray-300 rounded-lg py-3 hover:bg-gray-100 transition"
         >
-            Login
-        </button>
-    </form>
-    <p>Don't have an account? <a href="{% url 'create-user'%}" class="text-blue-300 hover:text-blue-400 text-lg cursor-pointer">Create account</a></p>
+
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 viewBox="0 0 48 48"
+                 class="w-6 h-6">
+
+                <path fill="#EA4335"
+                      d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.86-6.86C35.93 2.6 30.4 0 24 0 14.64 0 6.58 5.38 2.64 13.22l7.98 6.19C12.5 13.25 17.77 9.5 24 9.5z"/>
+
+                <path fill="#4285F4"
+                      d="M46.5 24.5c0-1.64-.15-3.22-.42-4.75H24v9h12.68c-.55 2.96-2.22 5.47-4.73 7.16l7.28 5.66C43.85 37.54 46.5 31.54 46.5 24.5z"/>
+
+                <path fill="#FBBC05"
+                      d="M10.62 28.41A14.49 14.49 0 019.5 24c0-1.54.27-3.03.75-4.41l-7.98-6.19A23.89 23.89 0 000 24c0 3.83.92 7.45 2.55 10.6l8.07-6.19z"/>
+
+                <path fill="#34A853"
+                      d="M24 48c6.48 0 11.92-2.14 15.9-5.82l-7.28-5.66c-2.02 1.36-4.6 2.16-8.62 2.16-6.23 0-11.5-3.75-13.38-9.1l-8.07 6.19C6.58 42.62 14.64 48 24 48z"/>
+            </svg>
+
+            <span class="font-medium text-gray-700">
+                Continue with Google
+            </span>
+
+        </a>
+
+        <!-- Register -->
+        <div class="mt-8 text-center text-gray-600">
+
+            Don't have an account?
+
+            <a
+                href="{% url 'create-user' %}"
+                class="text-blue-600 hover:text-blue-700 font-semibold"
+            >
+                Create Account
+            </a>
+
+        </div>
+
+    </div>
+
 </div>
+
 {% endblock %}
+```
